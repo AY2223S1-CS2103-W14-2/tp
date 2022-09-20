@@ -9,15 +9,15 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 ## Project team
 
-### John Doe
+### Jamie Tan
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/jamie.png" width="200px">
 
-[[homepage](http://www.comp.nus.edu.sg/~damithch)]
-[[github](https://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
+[[github](https://github.com/jamietan2002)]
+[[portfolio](team/jamie.md)]
 
-* Role: Project Advisor
+* Role: Code Quality and Integration
+* Responsibilities: Main Logic (Command Parsing)
 
 ### Jane Doe
 
