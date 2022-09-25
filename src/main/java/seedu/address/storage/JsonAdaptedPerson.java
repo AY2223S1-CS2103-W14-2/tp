@@ -49,6 +49,18 @@ class JsonAdaptedPerson {
         }
     }
 
+    public JsonAdaptedPerson(String name, String phone, String email,
+                             String address, List<JsonAdaptedTag> tagged) {
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.remark = "";
+        if (tagged != null) {
+            this.tagged.addAll(tagged);
+        }
+    }
+
     /**
      * Converts a given {@code Person} into this class for Jackson use.
      */
