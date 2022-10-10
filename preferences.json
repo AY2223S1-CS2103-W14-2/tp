@@ -1,0 +1,11 @@
+{
+  "guiSettings" : {
+    "windowWidth" : 850.0,
+    "windowHeight" : 703.0,
+    "windowCoordinates" : {
+      "x" : 429,
+      "y" : 35
+    }
+  },
+  "addressBookFilePath" : "data\\foodwhere.json"
+}
