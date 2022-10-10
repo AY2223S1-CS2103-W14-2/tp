@@ -130,7 +130,7 @@ public class ModelManager implements Model {
         addressBook.addReview(review);
         updateFilteredReviewList(PREDICATE_SHOW_ALL_REVIEWS);
     }
-
+    
     //=========== Filtered Stall List Accessors =============================================================
 
     /**
