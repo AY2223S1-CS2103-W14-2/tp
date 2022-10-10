@@ -66,8 +66,7 @@ public interface Model {
      * The stall must exist in the address book.
      */
     void deleteStall(Stall target);
-    void deleteReview(Review target);
-
+    
     /**
      * Adds the given stall.
      * {@code stall} must not already exist in the address book.
