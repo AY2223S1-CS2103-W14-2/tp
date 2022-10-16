@@ -12,14 +12,11 @@ Class AddressBook
 Class ModelManager
 Class UserPrefs
 
-Class UniquePersonList
-Class Person
-Class Address
-Class Email
+Class UniqueStallList
+Class Stall
 Class Name
-Class Phone
+Class Address
 Class Tag
-
 }
 
 Class HiddenOutside #FFFFFF
@@ -34,17 +31,13 @@ ModelManager -left-> "1" AddressBook
 ModelManager -right-> "1" UserPrefs
 UserPrefs .up.|> ReadOnlyUserPrefs
 
-AddressBook *--> "1" UniquePersonList
-UniquePersonList --> "~* all" Person
-Person *--> Name
-Person *--> Phone
-Person *--> Email
-Person *--> Address
-Person *--> "*" Tag
+AddressBook *--> "1" UniqueStallList
+UniqueStallList --> "~* all" Stall
+Stall *--> Name
+Stall *--> Address
+Stall *--> "*" Tag
 
-Name -[hidden]right-> Phone
-Phone -[hidden]right-> Address
-Address -[hidden]right-> Email
+Name -[hidden]right-> Address
 
-ModelManager -->"~* filtered" Person
+ModelManager -->"~* filtered" Stall
 @enduml
