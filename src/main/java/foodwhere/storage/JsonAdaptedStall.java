@@ -105,7 +105,8 @@ class JsonAdaptedStall {
 
         final Set<Tag> modelTags = new HashSet<>(stallTags);
 
-        return new Stall(modelName, modelAddress, modelTags);
+        final Set<Review> modelReviews = getModelReviews();
+        return new Stall(modelName, modelAddress, modelTags, modelReviews);
     }
 
     /**
@@ -113,8 +114,8 @@ class JsonAdaptedStall {
      *
      * @throws IllegalValueException if there were any data constraints violated in the adapted stall.
      */
-    public List<Review> getModelReviews() throws IllegalValueException {
-        final List<Review> modelReviews = new ArrayList<>();
+    public Set<Review> getModelReviews() throws IllegalValueException {
+        final Set<Review> modelReviews = new HashSet<>();
 
         if (name == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Name.class.getSimpleName()));

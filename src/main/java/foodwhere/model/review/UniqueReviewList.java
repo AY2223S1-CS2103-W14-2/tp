@@ -79,9 +79,12 @@ public class UniqueReviewList implements Iterable<Review> {
         }
     }
 
-    public void setStalls(UniqueReviewList replacement) {
-        requireNonNull(replacement);
-        internalList.setAll(replacement.internalList);
+    /**
+     * Replaces the contents of this list with {@code reviews}.
+     */
+    public void setReviews(UniqueReviewList reviews) {
+        requireNonNull(reviews);
+        internalList.setAll(reviews.internalList);
     }
 
     /**

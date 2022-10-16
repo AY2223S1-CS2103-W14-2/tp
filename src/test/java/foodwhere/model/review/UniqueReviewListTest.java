@@ -137,7 +137,7 @@ public class UniqueReviewListTest {
 
     @Test
     public void setStalls_nullUniqueReviewList_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> uniqueReviewList.setStalls((UniqueReviewList) null));
+        assertThrows(NullPointerException.class, () -> uniqueReviewList.setReviews((UniqueReviewList) null));
     }
 
     @Test
@@ -145,7 +145,7 @@ public class UniqueReviewListTest {
         uniqueReviewList.add(TypicalReviews.ALICE);
         UniqueReviewList expectedUniqueReviewList = new UniqueReviewList();
         expectedUniqueReviewList.add(TypicalReviews.BOB);
-        uniqueReviewList.setStalls(expectedUniqueReviewList);
+        uniqueReviewList.setReviews(expectedUniqueReviewList);
         assertEquals(expectedUniqueReviewList, uniqueReviewList);
     }
 
