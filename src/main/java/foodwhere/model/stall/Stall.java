@@ -9,6 +9,7 @@ import java.util.Set;
 
 import foodwhere.model.commons.Name;
 import foodwhere.model.commons.Tag;
+import foodwhere.model.review.Rating;
 import foodwhere.model.review.Review;
 
 /**
@@ -70,6 +71,10 @@ public class Stall {
      */
     public Set<Review> getReviews() {
         return Collections.unmodifiableSet(reviews);
+    }
+
+    public void addReview(Review review) {
+        reviews.add(review);
     }
 
     /**

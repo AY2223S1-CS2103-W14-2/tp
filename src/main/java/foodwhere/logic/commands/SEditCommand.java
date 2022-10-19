@@ -1,5 +1,6 @@
 package foodwhere.logic.commands;
 
+import static foodwhere.model.Model.PREDICATE_SHOW_ALL_REVIEWS;
 import static foodwhere.model.Model.PREDICATE_SHOW_ALL_STALLS;
 import static java.util.Objects.requireNonNull;
 
@@ -17,6 +18,7 @@ import foodwhere.logic.parser.CliSyntax;
 import foodwhere.model.Model;
 import foodwhere.model.commons.Name;
 import foodwhere.model.commons.Tag;
+import foodwhere.model.review.Review;
 import foodwhere.model.stall.Address;
 import foodwhere.model.stall.Stall;
 
@@ -71,8 +73,22 @@ public class SEditCommand extends Command {
             throw new CommandException(MESSAGE_DUPLICATE_STALL);
         }
 
+        if (!stallToEdit.getReviews().isEmpty() && !stallToEdit.getName().equals(editedStall.getName())) {
+            Review[] reviewsToEdit = stallToEdit.getReviews().toArray(new Review[stallToEdit.getReviews().size()]);
+            Review[] editedReviews = editedStall.getReviews().toArray(new Review[editedStall.getReviews().size()]);
+
+            assert (reviewsToEdit.length == editedReviews.length);
+
+            for (int i = 0; i < editedReviews.length; i++) {
+                model.setReview(reviewsToEdit[i],editedReviews[i]);
+            }
+            model.updateFilteredReviewList(PREDICATE_SHOW_ALL_REVIEWS);
+        }
+
+
         model.setStall(stallToEdit, editedStall);
         model.updateFilteredStallList(PREDICATE_SHOW_ALL_STALLS);
+
         return new CommandResult(String.format(MESSAGE_EDIT_STALL_SUCCESS, editedStall));
     }
 
@@ -87,7 +103,21 @@ public class SEditCommand extends Command {
         Address updatedAddress = editStallDescriptor.getAddress().orElse(stallToEdit.getAddress());
         Set<Tag> updatedTags = editStallDescriptor.getTags().orElse(stallToEdit.getTags());
 
-        return new Stall(updatedName, updatedAddress, updatedTags);
+        Set<Review> reviewsToUpdate = stallToEdit.getReviews();
+        Set<Review> updatedReviews = new HashSet<>();
+        if (updatedName.equals(stallToEdit.getName())) {
+            updatedReviews = reviewsToUpdate;
+        }
+        else {
+            if (!reviewsToUpdate.isEmpty()) {
+                for (Review review : reviewsToUpdate) {
+                    Review updatedReview = new Review(updatedName, review.getDate(), review.getContent(), review.getRating(), review.getTags());
+                    updatedReviews.add(updatedReview);
+                }
+            }
+        }
+
+        return new Stall(updatedName, updatedAddress, updatedTags, updatedReviews);
     }
 
     @Override

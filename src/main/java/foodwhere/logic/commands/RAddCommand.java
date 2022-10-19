@@ -76,7 +76,7 @@ public class RAddCommand extends Command {
         if (model.hasReview(toAdd)) {
             throw new CommandException(MESSAGE_DUPLICATE_REVIEW);
         }
-
+        stall.addReview(toAdd);
         model.addReview(toAdd);
 
         return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd));
