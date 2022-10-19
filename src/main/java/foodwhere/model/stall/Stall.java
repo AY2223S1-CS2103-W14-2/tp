@@ -9,7 +9,6 @@ import java.util.Set;
 
 import foodwhere.model.commons.Name;
 import foodwhere.model.commons.Tag;
-import foodwhere.model.review.Rating;
 import foodwhere.model.review.Review;
 
 /**
@@ -73,6 +72,10 @@ public class Stall {
         return Collections.unmodifiableSet(reviews);
     }
 
+    /**
+     * Adds a review to the review set.
+     * The review must not already exist in the review set.
+     */
     public void addReview(Review review) {
         reviews.add(review);
     }

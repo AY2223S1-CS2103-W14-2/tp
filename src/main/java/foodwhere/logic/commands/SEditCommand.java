@@ -80,7 +80,7 @@ public class SEditCommand extends Command {
             assert (reviewsToEdit.length == editedReviews.length);
 
             for (int i = 0; i < editedReviews.length; i++) {
-                model.setReview(reviewsToEdit[i],editedReviews[i]);
+                model.setReview(reviewsToEdit[i], editedReviews[i]);
             }
             model.updateFilteredReviewList(PREDICATE_SHOW_ALL_REVIEWS);
         }
@@ -107,11 +107,15 @@ public class SEditCommand extends Command {
         Set<Review> updatedReviews = new HashSet<>();
         if (updatedName.equals(stallToEdit.getName())) {
             updatedReviews = reviewsToUpdate;
-        }
-        else {
+        } else {
             if (!reviewsToUpdate.isEmpty()) {
                 for (Review review : reviewsToUpdate) {
-                    Review updatedReview = new Review(updatedName, review.getDate(), review.getContent(), review.getRating(), review.getTags());
+                    Review updatedReview = new Review(
+                            updatedName,
+                            review.getDate(),
+                            review.getContent(),
+                            review.getRating(),
+                            review.getTags());
                     updatedReviews.add(updatedReview);
                 }
             }
