@@ -3,9 +3,9 @@ package foodwhere.testutil;
 import java.util.Set;
 
 import foodwhere.logic.commands.SAddCommand;
-import foodwhere.logic.commands.SEditCommand;
 import foodwhere.logic.parser.CliSyntax;
 import foodwhere.model.commons.Tag;
+import foodwhere.model.stall.EditStallDescriptor;
 import foodwhere.model.stall.Stall;
 
 /**
@@ -36,7 +36,7 @@ public class StallUtil {
     /**
      * Returns the part of command string for the given {@code EditStallDescriptor}'s details.
      */
-    public static String getEditStallDescriptorDetails(SEditCommand.EditStallDescriptor descriptor) {
+    public static String getEditStallDescriptorDetails(EditStallDescriptor descriptor) {
         StringBuilder sb = new StringBuilder();
         descriptor.getName().ifPresent(name -> sb.append(CliSyntax.PREFIX_NAME).append(name.fullName).append(" "));
         descriptor.getAddress().ifPresent(address ->

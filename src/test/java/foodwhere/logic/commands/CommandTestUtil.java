@@ -15,6 +15,7 @@ import foodwhere.model.AddressBook;
 import foodwhere.model.Model;
 import foodwhere.model.review.NameContainsStallPredicate;
 import foodwhere.model.review.Review;
+import foodwhere.model.stall.EditStallDescriptor;
 import foodwhere.model.stall.NameContainsKeywordsPredicate;
 import foodwhere.model.stall.Stall;
 import foodwhere.testutil.EditStallDescriptorBuilder;
@@ -64,8 +65,8 @@ public class CommandTestUtil {
     public static final String PREAMBLE_WHITESPACE = "\t  \r  \n";
     public static final String PREAMBLE_NON_EMPTY = "NonEmptyPreamble";
 
-    public static final SEditCommand.EditStallDescriptor DESC_AMY;
-    public static final SEditCommand.EditStallDescriptor DESC_BOB;
+    public static final EditStallDescriptor DESC_AMY;
+    public static final EditStallDescriptor DESC_BOB;
 
     static {
         DESC_AMY = new EditStallDescriptorBuilder().withName(VALID_NAME_AMY)

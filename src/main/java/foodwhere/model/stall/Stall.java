@@ -73,7 +73,7 @@ public class Stall {
     }
 
     /**
-     * Returns true if both stalls have the same name.
+     * Returns true if both stalls have the same name and address.
      * This defines a weaker notion of equality between two stalls.
      */
     public boolean isSameStall(Stall otherStall) {
@@ -82,7 +82,8 @@ public class Stall {
         }
 
         return otherStall != null
-                && otherStall.getName().equals(getName());
+                && otherStall.getName().equals(getName())
+                && otherStall.getAddress().equals(getAddress());
     }
 
     /**

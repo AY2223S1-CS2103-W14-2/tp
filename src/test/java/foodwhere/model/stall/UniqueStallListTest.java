@@ -42,7 +42,6 @@ public class UniqueStallListTest {
         uniqueStallList.add(TypicalStalls.ALICE);
         Stall editedAlice =
                 new StallBuilder(TypicalStalls.ALICE)
-                        .withAddress(CommandTestUtil.VALID_ADDRESS_BOB)
                         .withTags(CommandTestUtil.VALID_TAG_HUSBAND)
                 .build();
         assertTrue(uniqueStallList.contains(editedAlice));

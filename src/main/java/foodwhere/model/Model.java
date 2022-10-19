@@ -97,10 +97,10 @@ public interface Model {
     void deleteReview(Review target);
 
     /**
-     * Adds the given review.
+     * Adds the given review to a stall.
      * {@code review} must not already exist in the address book.
      */
-    void addReview(Review review);
+    void addReviewToStall(Review review, Stall stall);
 
     /**
      * Replaces the given review {@code target} with {@code editedReview}.

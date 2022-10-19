@@ -50,7 +50,10 @@ public class SampleDataUtil {
         }
 
         for (Review sampleReview : getSampleReviews()) {
-            sampleAb.addReview(sampleReview);
+            sampleAb.addReviewToStall(sampleReview, sampleAb.getStallList()
+                    .stream()
+                    .filter(stall -> stall.getName().fullName.equals(sampleReview.getName().fullName))
+                    .findFirst().get());
         }
         return sampleAb;
     }

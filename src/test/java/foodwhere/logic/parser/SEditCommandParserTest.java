@@ -26,6 +26,7 @@ import foodwhere.logic.commands.SEditCommand;
 import foodwhere.model.commons.Name;
 import foodwhere.model.commons.Tag;
 import foodwhere.model.stall.Address;
+import foodwhere.model.stall.EditStallDescriptor;
 import foodwhere.testutil.EditStallDescriptorBuilder;
 import foodwhere.testutil.TypicalIndexes;
 
@@ -90,7 +91,7 @@ public class SEditCommandParserTest {
         String userInput = targetIndex.getOneBased() + TAG_DESC_HUSBAND
                 + ADDRESS_DESC_AMY + NAME_DESC_AMY + TAG_DESC_FRIEND;
 
-        SEditCommand.EditStallDescriptor descriptor = new EditStallDescriptorBuilder().withName(VALID_NAME_AMY)
+        EditStallDescriptor descriptor = new EditStallDescriptorBuilder().withName(VALID_NAME_AMY)
                 .withAddress(VALID_ADDRESS_AMY)
                 .withTags(VALID_TAG_HUSBAND, VALID_TAG_FRIEND).build();
         SEditCommand expectedCommand = new SEditCommand(targetIndex, descriptor);
@@ -103,7 +104,7 @@ public class SEditCommandParserTest {
         Index targetIndex = TypicalIndexes.INDEX_FIRST_STALL;
         String userInput = targetIndex.getOneBased() + ADDRESS_DESC_BOB;
 
-        SEditCommand.EditStallDescriptor descriptor = new EditStallDescriptorBuilder()
+        EditStallDescriptor descriptor = new EditStallDescriptorBuilder()
                 .withAddress(VALID_ADDRESS_BOB).build();
         SEditCommand expectedCommand = new SEditCommand(targetIndex, descriptor);
 
@@ -115,7 +116,7 @@ public class SEditCommandParserTest {
         // name
         Index targetIndex = TypicalIndexes.INDEX_THIRD_STALL;
         String userInput = targetIndex.getOneBased() + NAME_DESC_AMY;
-        SEditCommand.EditStallDescriptor descriptor =
+        EditStallDescriptor descriptor =
                 new EditStallDescriptorBuilder().withName(VALID_NAME_AMY).build();
         SEditCommand expectedCommand = new SEditCommand(targetIndex, descriptor);
         assertParseSuccess(parser, userInput, expectedCommand);
@@ -140,7 +141,7 @@ public class SEditCommandParserTest {
                 + TAG_DESC_FRIEND + ADDRESS_DESC_AMY + TAG_DESC_FRIEND
                 + ADDRESS_DESC_BOB + TAG_DESC_HUSBAND;
 
-        SEditCommand.EditStallDescriptor descriptor = new EditStallDescriptorBuilder()
+        EditStallDescriptor descriptor = new EditStallDescriptorBuilder()
                 .withAddress(VALID_ADDRESS_BOB)
                 .withTags(VALID_TAG_FRIEND, VALID_TAG_HUSBAND)
                 .build();
@@ -154,7 +155,7 @@ public class SEditCommandParserTest {
         // no other valid values specified
         Index targetIndex = TypicalIndexes.INDEX_FIRST_STALL;
         String userInput = targetIndex.getOneBased() + INVALID_ADDRESS_DESC + ADDRESS_DESC_BOB;
-        SEditCommand.EditStallDescriptor descriptor =
+        EditStallDescriptor descriptor =
                 new EditStallDescriptorBuilder().withAddress(VALID_ADDRESS_BOB).build();
         SEditCommand expectedCommand = new SEditCommand(targetIndex, descriptor);
         assertParseSuccess(parser, userInput, expectedCommand);
@@ -173,7 +174,7 @@ public class SEditCommandParserTest {
         Index targetIndex = TypicalIndexes.INDEX_THIRD_STALL;
         String userInput = targetIndex.getOneBased() + TAG_EMPTY;
 
-        SEditCommand.EditStallDescriptor descriptor = new EditStallDescriptorBuilder().withTags().build();
+        EditStallDescriptor descriptor = new EditStallDescriptorBuilder().withTags().build();
         SEditCommand expectedCommand = new SEditCommand(targetIndex, descriptor);
 
         assertParseSuccess(parser, userInput, expectedCommand);

@@ -3,21 +3,14 @@ package foodwhere.logic.commands;
 import static foodwhere.model.Model.PREDICATE_SHOW_ALL_STALLS;
 import static java.util.Objects.requireNonNull;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 import foodwhere.commons.core.Messages;
 import foodwhere.commons.core.index.Index;
-import foodwhere.commons.util.CollectionUtil;
 import foodwhere.logic.commands.exceptions.CommandException;
 import foodwhere.logic.parser.CliSyntax;
 import foodwhere.model.Model;
-import foodwhere.model.commons.Name;
-import foodwhere.model.commons.Tag;
-import foodwhere.model.stall.Address;
+import foodwhere.model.stall.EditStallDescriptor;
 import foodwhere.model.stall.Stall;
 
 /**
@@ -65,7 +58,7 @@ public class SEditCommand extends Command {
         }
 
         Stall stallToEdit = lastShownList.get(index.getZeroBased());
-        Stall editedStall = createEditedStall(stallToEdit, editStallDescriptor);
+        Stall editedStall = EditStallDescriptor.createEditedStall(stallToEdit, editStallDescriptor);
 
         if (!stallToEdit.isSameStall(editedStall) && model.hasStall(editedStall)) {
             throw new CommandException(MESSAGE_DUPLICATE_STALL);
@@ -74,20 +67,6 @@ public class SEditCommand extends Command {
         model.setStall(stallToEdit, editedStall);
         model.updateFilteredStallList(PREDICATE_SHOW_ALL_STALLS);
         return new CommandResult(String.format(MESSAGE_EDIT_STALL_SUCCESS, editedStall));
-    }
-
-    /**
-     * Creates and returns a {@code Stall} with the details of {@code stallToEdit}
-     * edited with {@code editStallDescriptor}.
-     */
-    private static Stall createEditedStall(Stall stallToEdit, EditStallDescriptor editStallDescriptor) {
-        assert stallToEdit != null;
-
-        Name updatedName = editStallDescriptor.getName().orElse(stallToEdit.getName());
-        Address updatedAddress = editStallDescriptor.getAddress().orElse(stallToEdit.getAddress());
-        Set<Tag> updatedTags = editStallDescriptor.getTags().orElse(stallToEdit.getTags());
-
-        return new Stall(updatedName, updatedAddress, updatedTags);
     }
 
     @Override
@@ -108,85 +87,5 @@ public class SEditCommand extends Command {
                 && editStallDescriptor.equals(e.editStallDescriptor);
     }
 
-    /**
-     * Stores the details to edit the stall with. Each non-empty field value will replace the
-     * corresponding field value of the stall.
-     */
-    public static class EditStallDescriptor {
-        private Name name;
-        private Address address;
-        private Set<Tag> tags;
 
-        public EditStallDescriptor() {}
-
-        /**
-         * Copy constructor.
-         * A defensive copy of {@code tags} is used internally.
-         */
-        public EditStallDescriptor(EditStallDescriptor toCopy) {
-            setName(toCopy.name);
-            setAddress(toCopy.address);
-            setTags(toCopy.tags);
-        }
-
-        /**
-         * Returns true if at least one field is edited.
-         */
-        public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, address, tags);
-        }
-
-        public void setName(Name name) {
-            this.name = name;
-        }
-
-        public Optional<Name> getName() {
-            return Optional.ofNullable(name);
-        }
-
-        public void setAddress(Address address) {
-            this.address = address;
-        }
-
-        public Optional<Address> getAddress() {
-            return Optional.ofNullable(address);
-        }
-
-        /**
-         * Sets {@code tags} to this object's {@code tags}.
-         * A defensive copy of {@code tags} is used internally.
-         */
-        public void setTags(Set<Tag> tags) {
-            this.tags = (tags != null) ? new HashSet<>(tags) : null;
-        }
-
-        /**
-         * Returns an unmodifiable tag set, which throws {@code UnsupportedOperationException}
-         * if modification is attempted.
-         * Returns {@code Optional#empty()} if {@code tags} is null.
-         */
-        public Optional<Set<Tag>> getTags() {
-            return (tags != null) ? Optional.of(Collections.unmodifiableSet(tags)) : Optional.empty();
-        }
-
-        @Override
-        public boolean equals(Object other) {
-            // short circuit if same object
-            if (other == this) {
-                return true;
-            }
-
-            // instanceof handles nulls
-            if (!(other instanceof EditStallDescriptor)) {
-                return false;
-            }
-
-            // state check
-            EditStallDescriptor e = (EditStallDescriptor) other;
-
-            return getName().equals(e.getName())
-                    && getAddress().equals(e.getAddress())
-                    && getTags().equals(e.getTags());
-        }
-    }
 }

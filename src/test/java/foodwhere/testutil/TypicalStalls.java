@@ -9,6 +9,7 @@ import static foodwhere.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import foodwhere.model.AddressBook;
@@ -60,11 +61,19 @@ public class TypicalStalls {
      */
     public static AddressBook getTypicalAddressBook() {
         AddressBook ab = new AddressBook();
-        for (Stall stall : getTypicalStalls()) {
-            ab.addStall(stall);
-        }
+        HashMap<String, ArrayList<Review>> reviewsByStallName = new HashMap<>();
         for (Review review : TypicalReviews.getTypicalReviews()) {
-            ab.addReview(review);
+            String stallName = review.getName().fullName;
+            ArrayList<Review> reviews = reviewsByStallName.getOrDefault(stallName, new ArrayList<>());
+            reviews.add(review);
+            reviewsByStallName.put(stallName, reviews);
+        }
+        for (Stall stall : getTypicalStalls()) {
+            StallBuilder stallBuilder = new StallBuilder(stall);
+            stallBuilder.withReviews(
+                    reviewsByStallName.getOrDefault(stall.getName().fullName, new ArrayList<>())
+                            .toArray(new Review[]{}));
+            ab.addStall(stallBuilder.build());
         }
         return ab;
     }

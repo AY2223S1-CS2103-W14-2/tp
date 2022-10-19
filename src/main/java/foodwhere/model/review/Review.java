@@ -62,8 +62,8 @@ public class Review {
     }
 
     /**
-     * Returns true if both review have the same stall name.
-     * This defines a weaker notion of equality between two reviews.
+     * Returns true if both reviews have equal data.
+     * No duplicate finding beyond this is done.
      */
     public boolean isSameReview(Review otherReview) {
         if (otherReview == this) {

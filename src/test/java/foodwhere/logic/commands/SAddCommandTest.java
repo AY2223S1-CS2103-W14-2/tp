@@ -115,7 +115,7 @@ public class SAddCommandTest {
         }
 
         @Override
-        public void addReview(Review review) {
+        public void addReviewToStall(Review review, Stall stall) {
             throw new AssertionError("This method should not be called.");
         }
 

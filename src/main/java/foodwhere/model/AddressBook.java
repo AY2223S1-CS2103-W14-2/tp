@@ -3,11 +3,14 @@ package foodwhere.model;
 import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import foodwhere.model.review.Review;
 import foodwhere.model.review.UniqueReviewList;
+import foodwhere.model.stall.EditStallDescriptor;
 import foodwhere.model.stall.Stall;
 import foodwhere.model.stall.UniqueStallList;
 import javafx.collections.ObservableList;
@@ -41,6 +44,33 @@ public class AddressBook implements ReadOnlyAddressBook {
     public AddressBook(ReadOnlyAddressBook toBeCopied) {
         this();
         resetData(toBeCopied);
+        refreshReviews();
+    }
+
+    /**
+     * Sets {@code reviews} correctly.
+     */
+    private void refreshReviews() {
+        ArrayList<Review> current = new ArrayList<>();
+        for (Stall stall : stalls) {
+            for (Review review : stall.getReviews()) {
+                current.add(review);
+            }
+        }
+        ArrayList<Review> toRemove = new ArrayList<>();
+        for (Review review : reviews) {
+            if (!current.contains(review)) {
+                toRemove.remove(review);
+            }
+        }
+        for (Review review : toRemove) {
+            reviews.remove(review);
+        }
+        for (Review review : current) {
+            if (!reviews.contains(review)) {
+                reviews.add(review);
+            }
+        }
     }
 
     //// list overwrite operations
@@ -51,14 +81,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void setStalls(List<Stall> stalls) {
         this.stalls.setStalls(stalls);
-    }
-
-    /**
-     * Replaces the contents of the review list with {@code reviews}.
-     * {@code reviews} must not contain duplicate reviews.
-     */
-    public void setReviews(List<Review> reviews) {
-        this.reviews.setReviews(reviews);
+        refreshReviews();
     }
 
     /**
@@ -66,9 +89,8 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void resetData(ReadOnlyAddressBook newData) {
         requireNonNull(newData);
-
         setStalls(newData.getStallList());
-        setReviews(newData.getReviewList());
+        refreshReviews();
     }
 
     //// stall-level operations
@@ -87,6 +109,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void addStall(Stall p) {
         stalls.add(p);
+        refreshReviews();
     }
 
     /**
@@ -96,8 +119,8 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void setStall(Stall target, Stall editedStall) {
         requireNonNull(editedStall);
-
         stalls.setStall(target, editedStall);
+        refreshReviews();
     }
 
     /**
@@ -106,15 +129,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void removeStall(Stall key) {
         stalls.remove(key);
-        List<Review> toRemove = new ArrayList<>();
-        for (Review review : reviews) {
-            if (review.getName().fullName.equals(key.getName().fullName)) {
-                toRemove.add(review);
-            }
-        }
-        for (Review review : toRemove) {
-            reviews.remove(review);
-        }
+        refreshReviews();
     }
 
     /**
@@ -131,6 +146,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public boolean hasReview(Review review) {
         requireNonNull(review);
+        refreshReviews();
         return reviews.contains(review);
     }
 
@@ -138,8 +154,18 @@ public class AddressBook implements ReadOnlyAddressBook {
      * Adds a review to the address book.
      * The review must not already exist in the address book.
      */
-    public void addReview(Review p) {
-        reviews.add(p);
+    public void addReviewToStall(Review p, Stall s) {
+        Set<Review> originalReviews = s.getReviews();
+        if (originalReviews.contains(p)) {
+            return;
+        }
+        EditStallDescriptor editStallDescriptor = new EditStallDescriptor();
+        HashSet<Review> editedReviews = new HashSet<>(originalReviews);
+        editedReviews.add(p);
+        editStallDescriptor.setReviews(editedReviews);
+        Stall newStall = EditStallDescriptor.createEditedStall(s, editStallDescriptor);
+        stalls.setStall(s, newStall);
+        refreshReviews();
     }
 
     /**
@@ -149,7 +175,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void setReview(Review target, Review editedReview) {
         requireNonNull(editedReview);
-
+        refreshReviews();
         reviews.setReview(target, editedReview);
     }
 
@@ -158,7 +184,24 @@ public class AddressBook implements ReadOnlyAddressBook {
      * {@code key} must exist in the address book.
      */
     public void removeReview(Review key) {
-        reviews.remove(key);
+        refreshReviews();
+        // remove from stall
+        boolean deleted = false;
+        for (Stall stall : stalls) {
+            Set<Review> stallReviews = stall.getReviews();
+            if (stallReviews.contains(key)) {
+                HashSet<Review> newReviews = new HashSet<>(stallReviews);
+                newReviews.remove(key);
+                EditStallDescriptor editedStall = new EditStallDescriptor();
+                editedStall.setReviews(newReviews);
+                Stall newStall = EditStallDescriptor.createEditedStall(stall, editedStall);
+                setStall(stall, newStall);
+                deleted = true;
+                break;
+            }
+        }
+        assert(deleted);
+        refreshReviews();
     }
 
     /**
@@ -172,6 +215,7 @@ public class AddressBook implements ReadOnlyAddressBook {
 
     @Override
     public String toString() {
+        refreshReviews();
         return stalls.asUnmodifiableObservableList().size() + " stalls, "
                 + reviews.asUnmodifiableObservableList().size() + " reviews";
         // TODO: refine later
@@ -184,6 +228,7 @@ public class AddressBook implements ReadOnlyAddressBook {
 
     @Override
     public ObservableList<Review> getReviewList() {
+        refreshReviews();
         return reviews.asUnmodifiableObservableList();
     }
 
@@ -191,12 +236,12 @@ public class AddressBook implements ReadOnlyAddressBook {
     public boolean equals(Object other) {
         return other == this // short circuit if same object
                 || (other instanceof AddressBook // instanceof handles nulls
-                && stalls.equals(((AddressBook) other).stalls)
-                && reviews.equals(((AddressBook) other).reviews));
+                && stalls.equals(((AddressBook) other).stalls));
     }
 
     @Override
     public int hashCode() {
+        refreshReviews();
         return Objects.hash(stalls, reviews);
     }
 }

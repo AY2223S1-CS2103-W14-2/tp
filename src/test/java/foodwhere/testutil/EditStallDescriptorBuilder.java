@@ -4,10 +4,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import foodwhere.logic.commands.SEditCommand;
 import foodwhere.model.commons.Name;
 import foodwhere.model.commons.Tag;
+import foodwhere.model.review.Review;
 import foodwhere.model.stall.Address;
+import foodwhere.model.stall.EditStallDescriptor;
 import foodwhere.model.stall.Stall;
 
 /**
@@ -15,24 +16,25 @@ import foodwhere.model.stall.Stall;
  */
 public class EditStallDescriptorBuilder {
 
-    private SEditCommand.EditStallDescriptor descriptor;
+    private EditStallDescriptor descriptor;
 
     public EditStallDescriptorBuilder() {
-        descriptor = new SEditCommand.EditStallDescriptor();
+        descriptor = new EditStallDescriptor();
     }
 
-    public EditStallDescriptorBuilder(SEditCommand.EditStallDescriptor descriptor) {
-        this.descriptor = new SEditCommand.EditStallDescriptor(descriptor);
+    public EditStallDescriptorBuilder(EditStallDescriptor descriptor) {
+        this.descriptor = new EditStallDescriptor(descriptor);
     }
 
     /**
      * Returns an {@code EditStallDescriptor} with fields containing {@code stall}'s details
      */
     public EditStallDescriptorBuilder(Stall stall) {
-        descriptor = new SEditCommand.EditStallDescriptor();
+        descriptor = new EditStallDescriptor();
         descriptor.setName(stall.getName());
         descriptor.setAddress(stall.getAddress());
         descriptor.setTags(stall.getTags());
+        descriptor.setReviews(stall.getReviews());
     }
 
     /**
@@ -61,7 +63,17 @@ public class EditStallDescriptorBuilder {
         return this;
     }
 
-    public SEditCommand.EditStallDescriptor build() {
+    /**
+     * Parses the {@code reviews} into a {@code Set<Review>} and set it to the {@code EditStallDescriptor}
+     * that we are building.
+     */
+    public EditStallDescriptorBuilder withReviews(Review... reviews) {
+        Set<Review> reviewSet = Stream.of(reviews).collect(Collectors.toSet());
+        descriptor.setReviews(reviewSet);
+        return this;
+    }
+
+    public EditStallDescriptor build() {
         return descriptor;
     }
 }

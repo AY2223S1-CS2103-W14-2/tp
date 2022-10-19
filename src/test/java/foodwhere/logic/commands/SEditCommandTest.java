@@ -12,6 +12,7 @@ import foodwhere.model.AddressBook;
 import foodwhere.model.Model;
 import foodwhere.model.ModelManager;
 import foodwhere.model.UserPrefs;
+import foodwhere.model.stall.EditStallDescriptor;
 import foodwhere.model.stall.Stall;
 import foodwhere.testutil.EditStallDescriptorBuilder;
 import foodwhere.testutil.StallBuilder;
@@ -28,7 +29,7 @@ public class SEditCommandTest {
     @Test
     public void execute_allFieldsSpecifiedUnfilteredList_success() {
         Stall editedStall = new StallBuilder().build();
-        SEditCommand.EditStallDescriptor descriptor = new EditStallDescriptorBuilder(editedStall).build();
+        EditStallDescriptor descriptor = new EditStallDescriptorBuilder(editedStall).build();
         SEditCommand sEditCommand = new SEditCommand(TypicalIndexes.INDEX_FIRST_STALL, descriptor);
 
         String expectedMessage = String.format(SEditCommand.MESSAGE_EDIT_STALL_SUCCESS, editedStall);
@@ -49,7 +50,7 @@ public class SEditCommandTest {
                 stallInList.withName(CommandTestUtil.VALID_NAME_BOB)
                 .withTags(CommandTestUtil.VALID_TAG_HUSBAND).build();
 
-        SEditCommand.EditStallDescriptor descriptor =
+        EditStallDescriptor descriptor =
                 new EditStallDescriptorBuilder().withName(CommandTestUtil.VALID_NAME_BOB)
                 .withTags(CommandTestUtil.VALID_TAG_HUSBAND).build();
         SEditCommand sEditCommand = new SEditCommand(indexLastStall, descriptor);
@@ -65,7 +66,7 @@ public class SEditCommandTest {
     @Test
     public void execute_noFieldSpecifiedUnfilteredList_success() {
         SEditCommand sEditCommand =
-                new SEditCommand(TypicalIndexes.INDEX_FIRST_STALL, new SEditCommand.EditStallDescriptor());
+                new SEditCommand(TypicalIndexes.INDEX_FIRST_STALL, new EditStallDescriptor());
         Stall editedStall = model.getFilteredStallList().get(TypicalIndexes.INDEX_FIRST_STALL.getZeroBased());
 
         String expectedMessage = String.format(SEditCommand.MESSAGE_EDIT_STALL_SUCCESS, editedStall);
@@ -96,7 +97,7 @@ public class SEditCommandTest {
     @Test
     public void execute_duplicateStallUnfilteredList_failure() {
         Stall firstStall = model.getFilteredStallList().get(TypicalIndexes.INDEX_FIRST_STALL.getZeroBased());
-        SEditCommand.EditStallDescriptor descriptor = new EditStallDescriptorBuilder(firstStall).build();
+        EditStallDescriptor descriptor = new EditStallDescriptorBuilder(firstStall).build();
         SEditCommand sEditCommand = new SEditCommand(TypicalIndexes.INDEX_SECOND_STALL, descriptor);
 
         CommandTestUtil.assertCommandFailure(sEditCommand, model, SEditCommand.MESSAGE_DUPLICATE_STALL);
@@ -118,7 +119,7 @@ public class SEditCommandTest {
     @Test
     public void execute_invalidStallIndexUnfilteredList_failure() {
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredStallList().size() + 1);
-        SEditCommand.EditStallDescriptor descriptor =
+        EditStallDescriptor descriptor =
                 new EditStallDescriptorBuilder().withName(CommandTestUtil.VALID_NAME_BOB).build();
         SEditCommand sEditCommand = new SEditCommand(outOfBoundIndex, descriptor);
 
@@ -148,8 +149,8 @@ public class SEditCommandTest {
                 new SEditCommand(TypicalIndexes.INDEX_FIRST_STALL, CommandTestUtil.DESC_AMY);
 
         // same values -> returns true
-        SEditCommand.EditStallDescriptor copyDescriptor =
-                new SEditCommand.EditStallDescriptor(CommandTestUtil.DESC_AMY);
+        EditStallDescriptor copyDescriptor =
+                new EditStallDescriptor(CommandTestUtil.DESC_AMY);
         SEditCommand commandWithSameValues = new SEditCommand(TypicalIndexes.INDEX_FIRST_STALL, copyDescriptor);
         assertTrue(standardCommand.equals(commandWithSameValues));
 

@@ -10,9 +10,9 @@ import java.util.Set;
 
 import foodwhere.commons.core.index.Index;
 import foodwhere.logic.commands.SEditCommand;
-import foodwhere.logic.commands.SEditCommand.EditStallDescriptor;
 import foodwhere.logic.parser.exceptions.ParseException;
 import foodwhere.model.commons.Tag;
+import foodwhere.model.stall.EditStallDescriptor;
 
 /**
  * Parses input arguments and creates a new SEditCommand object

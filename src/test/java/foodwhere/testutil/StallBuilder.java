@@ -70,7 +70,7 @@ public class StallBuilder {
     /**
      * Sets the {@code Review} of the {@code Stall} that we are building.
      */
-    public StallBuilder withReview(Review ... reviews) {
+    public StallBuilder withReviews(Review ... reviews) {
         this.reviews = SampleDataUtil.getReviewSet(reviews);
         return this;
     }

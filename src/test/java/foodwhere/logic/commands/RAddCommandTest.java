@@ -37,7 +37,7 @@ public class RAddCommandTest {
         String expectedMessage = String.format(RAddCommand.MESSAGE_SUCCESS, review);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-        expectedModel.addReview(review);
+        expectedModel.addReviewToStall(review, lastStall);
 
         assertCommandSuccess(rAddCommand, model, expectedMessage, expectedModel);
     }
@@ -54,7 +54,7 @@ public class RAddCommandTest {
         String expectedMessage = String.format(RAddCommand.MESSAGE_SUCCESS, review);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-        expectedModel.addReview(review);
+        expectedModel.addReviewToStall(review, lastStall);
 
         assertCommandSuccess(rAddCommand, model, expectedMessage, expectedModel);
     }
@@ -75,7 +75,7 @@ public class RAddCommandTest {
         String expectedMessage = String.format(RAddCommand.MESSAGE_SUCCESS, review);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-        expectedModel.addReview(review);
+        expectedModel.addReviewToStall(review, stallInFilteredList);
 
         System.out.println(expectedModel);
         assertCommandSuccess(rAddCommand, model, expectedMessage, expectedModel);

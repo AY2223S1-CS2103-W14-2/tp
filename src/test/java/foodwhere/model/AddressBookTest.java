@@ -1,6 +1,5 @@
 package foodwhere.model;
 
-import static foodwhere.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
 import static foodwhere.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 import static foodwhere.testutil.Assert.assertThrows;
 import static foodwhere.testutil.TypicalStalls.ALICE;
@@ -13,12 +12,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
 import foodwhere.model.review.Review;
 import foodwhere.model.stall.Stall;
 import foodwhere.model.stall.exceptions.DuplicateStallException;
+import foodwhere.testutil.ReviewBuilder;
 import foodwhere.testutil.StallBuilder;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -47,7 +48,7 @@ public class AddressBookTest {
     @Test
     public void resetData_withDuplicateStalls_throwsDuplicateStallException() {
         // Two stalls with the same identity fields
-        Stall editedAlice = new StallBuilder(ALICE).withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_HUSBAND)
+        Stall editedAlice = new StallBuilder(ALICE).withTags(VALID_TAG_HUSBAND)
                 .build();
         List<Stall> newStalls = Arrays.asList(ALICE, editedAlice);
         AddressBookStub newData = new AddressBookStub(newStalls);
@@ -74,7 +75,7 @@ public class AddressBookTest {
     @Test
     public void hasStall_stallWithSameIdentityFieldsInAddressBook_returnsTrue() {
         addressBook.addStall(ALICE);
-        Stall editedAlice = new StallBuilder(ALICE).withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_HUSBAND)
+        Stall editedAlice = new StallBuilder(ALICE).withTags(VALID_TAG_HUSBAND)
                 .build();
         assertTrue(addressBook.hasStall(editedAlice));
     }
@@ -82,6 +83,21 @@ public class AddressBookTest {
     @Test
     public void getStallList_modifyList_throwsUnsupportedOperationException() {
         assertThrows(UnsupportedOperationException.class, () -> addressBook.getStallList().remove(0));
+    }
+
+    @Test
+    public void addStallAddReview_generalTesting_success() {
+        AddressBook addressBook = new AddressBook();
+        String testName = "test stall";
+        Stall testStall = new StallBuilder().withName(testName).build();
+        Review testReview = new ReviewBuilder().withName(testName).build();
+        addressBook.addStall(testStall);
+        addressBook.addReviewToStall(testReview, testStall);
+        Set<Review> reviews = addressBook.getStallList().get(0).getReviews();
+        assertEquals(1, reviews.size());
+        for (Review review : reviews) {
+            assertTrue(testReview.equals(review));
+        }
     }
 
     /**

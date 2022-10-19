@@ -24,6 +24,7 @@ import foodwhere.logic.commands.SFindCommand;
 import foodwhere.logic.commands.SListCommand;
 import foodwhere.logic.parser.exceptions.ParseException;
 import foodwhere.model.review.Review;
+import foodwhere.model.stall.EditStallDescriptor;
 import foodwhere.model.stall.NameContainsKeywordsPredicate;
 import foodwhere.model.stall.Stall;
 import foodwhere.testutil.EditStallDescriptorBuilder;
@@ -79,7 +80,7 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_sedit() throws Exception {
         Stall stall = new StallBuilder().build();
-        SEditCommand.EditStallDescriptor descriptor = new EditStallDescriptorBuilder(stall).build();
+        EditStallDescriptor descriptor = new EditStallDescriptorBuilder(stall).build();
         SEditCommand command = (SEditCommand) parser.parseCommand(SEditCommand.COMMAND_WORD + " "
                 + TypicalIndexes.INDEX_FIRST_STALL.getOneBased() + " "
                 + StallUtil.getEditStallDescriptorDetails(descriptor));
