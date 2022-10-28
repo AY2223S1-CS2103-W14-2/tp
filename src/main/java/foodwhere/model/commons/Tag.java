@@ -11,7 +11,7 @@ import static java.util.Objects.requireNonNull;
 public class Tag {
 
     public static final String MESSAGE_CONSTRAINTS = "Tags should be alphanumeric";
-    public static final String VALIDATION_REGEX = "^[a-zA-Z0-9]*$";
+    public static final String VALIDATION_REGEX = "\\p{Alnum}+";
 
     public final String tag;
 

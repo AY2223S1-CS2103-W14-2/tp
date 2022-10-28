@@ -1,5 +1,6 @@
 package foodwhere.logic.parser;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 
 import java.util.Collection;
@@ -74,7 +75,10 @@ public class ParserUtil {
         String[] tags = input.split(" ");
         final Set<Tag> tagSet = new HashSet<>();
         for (String tag : tags) {
-            tagSet.add(parseTag(tag));
+            Tag parsedTag = parseTag(tag);
+            if (!isNull(parsedTag)) {
+                tagSet.add(parsedTag);
+            }
         }
         return tagSet;
     }
@@ -103,6 +107,9 @@ public class ParserUtil {
     public static Tag parseTag(String tag) throws ParseException {
         requireNonNull(tag);
         String trimmedTag = tag.trim();
+        if (trimmedTag.isEmpty()) {
+            return null;
+        }
         if (!Tag.isValidTag(trimmedTag)) {
             throw new ParseException(Tag.MESSAGE_CONSTRAINTS);
         }
@@ -116,7 +123,10 @@ public class ParserUtil {
         requireNonNull(tags);
         final Set<Tag> tagSet = new HashSet<>();
         for (String tag : tags) {
-            tagSet.add(parseTag(tag));
+            Tag parsedTag = parseTag(tag);
+            if (!isNull(parsedTag)) {
+                tagSet.add(parsedTag);
+            }
         }
         return tagSet;
     }
